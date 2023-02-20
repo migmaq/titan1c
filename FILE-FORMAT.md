@@ -81,11 +81,13 @@ entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
 
 ### If we use git, we may be forced to use a layout like:
 
+```
 data/entries/a/agnimatl--U8S4IrcSb7f13TXy.toml
 
 media/entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
 media/entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
 media/entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
+```
 
 With only the data/ tree in git. (Because of issues with putting lots
 of binary files in git).
@@ -228,9 +230,11 @@ category = 'speech'
 
 Each entity would have 2 .toml versions:
 
+```
 published-li.toml
 published-sf.toml
 current.toml
+```
 
 If they are the same, there are no unpublished changes.
 
@@ -242,7 +246,9 @@ If they are different, show a semantic difference between them, and:
 
 Also have a history directory, that contains the recent edit history in the form:
 
+```
 2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
+```
 
 - up to the first __ is purely for humans, and is ignored by the system.
 - then comes the from_content_md5, then the to_content_md5, the editor_id, and the unique edit id.
