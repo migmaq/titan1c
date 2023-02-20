@@ -1,0 +1,77 @@
+_id = 10030
+attrs = []
+body_text = '''multi
+line
+body
+text'''
+internal_note = ''
+last_modified_date = '31/Jul/2019'
+other_regional_forms = []
+part_of_speech = 'vit'
+public_id = 'ajipjutoq'
+public_note = ''
+related_entries = []
+
+[[alternate_grammatical_forms]]
+_id = 131
+gloss = 'I encourage it'
+grammatical_form = '1-3i'
+
+    [[alternate_grammatical_forms.text]]
+    _id = 132
+    text = 'ajipjutu'
+    variant = 'mm-li'
+
+[[alternate_grammatical_forms]]
+_id = 133
+gloss = 'we encourage it'
+grammatical_form = '1p-3i'
+
+    [[alternate_grammatical_forms.text]]
+    _id = 134
+    text = 'ajipjutueg'
+    variant = 'mm-li'
+
+[[categories]]
+category = 'social'
+
+[[definitions]]
+_id = 125
+definition = 'He/she encourages it'
+
+[[examples]]
+_id = 126
+translation = 'He/she encourages everything to go well.'
+
+    [[examples.text]]
+    _id = 127
+    text = "Ajipjutoq ula's'tn ms't goqwei."
+    variant = 'mm-li'
+
+[[glosses]]
+_id = 128
+gloss = 'encourage (lifestyle)'
+
+[[glosses]]
+_id = 129
+gloss = 'encourage (virtue)'
+
+[[glosses]]
+_id = 130
+gloss = 'encourage (behaviour)'
+
+[[pronunciation_guide]]
+_id = 124
+text = 'a·jip·chu·dohk'
+variant = 'mm-li'
+
+[[spelling]]
+_id = 122
+text = 'ajipjutoq'
+variant = 'mm-li'
+
+[[status]]
+_id = 123
+details = ''
+status = 'done'
+variant = 'mm-li'
