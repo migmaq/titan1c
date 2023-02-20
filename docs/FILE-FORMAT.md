@@ -38,7 +38,7 @@ Sample id: C5B5mKYeKNQAHbSKhRK9
   spelling and adding a new one.
 
 - media is represented with links to a filename in the same directory,
-  the filename includes the md5 of the content in the filename.
+  the filename includes the SHA of the content in the filename.
   (There will have to be GC passes).
   
 - large binary files don't play well with git, so if we are using git, they will
@@ -251,7 +251,7 @@ Also have a history directory, that contains the recent edit history in the form
 ```
 
 - up to the first __ is purely for humans, and is ignored by the system.
-- then comes the from_content_md5, then the to_content_md5, the editor_id, and the unique edit id.
+- then comes the from_content_SHA, then the to_content_SHA, the editor_id, and the unique edit id.
 
 And this is used to inform the edit display (showing who edited what and so on).
 
