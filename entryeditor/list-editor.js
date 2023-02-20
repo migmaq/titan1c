@@ -2,7 +2,7 @@
 
 const template = `
   <ul>
-    <li v-for="item in itemsRef.ref">
+    <li v-for="item in itemsRef.ref" :key="item._id">
       {{ item.name }} - <slot :item="item"></slot>
     </li>
   </ul>
