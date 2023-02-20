@@ -50,47 +50,6 @@ Sample id: C5B5mKYeKNQAHbSKhRK9
 
 The human_friendly part is ignored for key equality.  This makes the format much more
 robust when hand edited (the human part will necessarily change sometimes).
-  
-  
-### Files for an dictionary entry
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/current.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
-entries/a/agnimatl--U8S4IrcSb7f13TXy/history/2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
-```
-
-### Files for the auto-generated published version of a dictionary entry
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/index.html
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034-200x200.jpg
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
-```
-
-### If we use git, we may be forced to use a layout like:
-
-```
-data/entries/a/agnimatl--U8S4IrcSb7f13TXy.toml
-
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
-```
-
-With only the data/ tree in git. (Because of issues with putting lots
-of binary files in git).
 
 ### Sample dictionary entry encoded in TOML:
 
@@ -213,6 +172,47 @@ category = 'communication'
 [[categories]]
 category = 'speech'
 ```
+  
+### Files for an dictionary entry
+
+```
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
+entries/a/agnimatl--U8S4IrcSb7f13TXy/current.toml
+entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
+entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
+entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
+entries/a/agnimatl--U8S4IrcSb7f13TXy/history/2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
+```
+
+### Files for the auto-generated published version of a dictionary entry
+
+```
+entries/a/agnimatl--U8S4IrcSb7f13TXy/index.html
+entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
+entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
+entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.mp3
+entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.mp3
+entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034-200x200.jpg
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.json
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.json
+entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
+```
+
+### If we use git, we may be forced to use a layout like:
+
+```
+data/entries/a/agnimatl--U8S4IrcSb7f13TXy.toml
+
+media/entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
+media/entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
+media/entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
+```
+
+With only the data/ tree in git. (Because of issues with putting lots
+of binary files in git).
+
 
 ## Using git for revision control?
 - if have to use cli git, will end up doing lots of parsing - which could be 
@@ -279,7 +279,7 @@ ISSUES:
 - having the history to the published version will allow for subsequent review.
 
 
-## Diff algorithm
+## Entry Diff algorithm
 - takes two (JSON) objects, with the restriction that every 'dict', has an id field,
   and that all arrays are arrays of 'dict's.
 - generates a difference in the form:
