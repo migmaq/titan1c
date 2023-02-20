@@ -53,6 +53,8 @@ robust when hand edited (the human part will necessarily change sometimes).
   
   
 ### Files for an dictionary entry
+
+```
 entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
 entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
 entries/a/agnimatl--U8S4IrcSb7f13TXy/current.toml
@@ -60,8 +62,11 @@ entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.
 entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
 entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
 entries/a/agnimatl--U8S4IrcSb7f13TXy/history/2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
+```
 
 ### Files for the auto-generated published version of a dictionary entry
+
+```
 entries/a/agnimatl--U8S4IrcSb7f13TXy/index.html
 entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
 entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
@@ -72,6 +77,7 @@ entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.json
 entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
 entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.json
 entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
+```
 
 ### If we use git, we may be forced to use a layout like:
 
