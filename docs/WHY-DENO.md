@@ -26,7 +26,9 @@ researchers need to work in situations where they do not have reliable
 internet access.
 
 ## Deno has typescript support baked in
-- for a volunteer project, with multiple contributors working sporadically, typing is critical.
+- for a volunteer project, with multiple contributors working
+  sporadically, and probably less tests than would be ideal, typing is
+  critical.
 
 ## Javascript is a very popular language with a large community
 - it is likely to be supported for a long time.
@@ -35,8 +37,8 @@ internet access.
 
 ## The whole system can be written in one language
 - we have substantial parts of the system that we have to run in the
-browser.  Using JS means we will have a single implementation language
-(for both code and skills reuse).
+  browser.  Using JS means we will have a single implementation language
+  (for both code and skills reuse).
 
 ## It is Super easy to run Deno projects
 - the deno runtime is a single executable file, once the user has downloaded that they can do:
@@ -65,6 +67,9 @@ grant than "-A", which disables the sandbox).
 ## Node.js is a trainwreck for long-lived projects
 - node.js encourages a style where you have a massive number of
   fragile dependencies, pre-processors, bundlers etc.
+- as a group project, if we use node.js, there will always be pressure
+  and a reason to get on board with one of these tools or
+  dependencies.  This is much less possible with Deno.
 - this is particularly problematic for long-lived projects - if you stop
   actively maintaining your dependencies for over 15 minutes on a node.js
   project, it becomes permanently unrunnable (because it is so

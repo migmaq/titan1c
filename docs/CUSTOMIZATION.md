@@ -85,7 +85,7 @@ User JS code can be also passed though to the published static site (for example
 search preprocessing - the search is done in on-page JS).  (A subdomain per site
 might be nice cross-site protection in this case).
 
-## Subclassing top level of system
+## Subclassing top level of system (including data model)
 
 Any verb in dog language can optionally be prefixed with one of the following:
 
