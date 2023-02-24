@@ -1,17 +1,57 @@
+# Customization of the dictionary
+
+This could look like a long design document for a complex set of
+features.
+
+Instead it is meant to be read as an alternative to a much more complex
+feature - end user configurable dictionary schema.
+
+## Talk to linguists first to try and make as universal an initial model as possible.
+
+In process.
 
 ## Customization by enabling and configuring optional features
 
+The base system can be the union of all the features we implement for
+all the language models we support.  When a feature is disabled, it
+will not be visible in the UI or the at-rest data model (the .toml
+files).
 
+For example MikMaq Online needs support for all language text to be
+specified in multiple orthographies.  If this feature was disabled,
+the multiple orthography UI would disappear (though it would still
+have some presence in the data model - the data model would
+fundamentally support multiple orthographies).
 
+Even things like revision control might be disablable.  For a single
+person project, it might be needless complexity
 
 ## Customization by configuring generic fields
 
-- every entry can have an 'attrs' list, with a set of attr names and types defined as configuration data.
-- we can have extension fields - for example 'field1' in various places, that are enabled and provided with
-a UI prompt in the configuration data.
+We can implement lightweight generic extension data system like:
+
+### Attrs section on each lexeme
+
+Every entry can have an 'attrs' list, with a set of attr names and
+types defined as configuration data.
+
+This feature is used in the updated MikMaq Online, and made the model
+much nicer.  There were a large number of seldom used, obscure
+attributes in the original - turning these into attrs was a big
+improvement.
+
+### Extension fields that are named in the configuration data
+
+We can have extension fields - for example 'field1' in various places,
+that are enabled and provided with a UI prompt in the configuration
+data.
 
 ## Customization using the configuration editing UI
 
+Common configuration, like editing enum values and enabling features
+should have UI so that it can be edited by non-technical users.
+(which will in turn update the .toml files that we are using for all
+our data).
 
 ## Customization with hand-edited configuration data
 
@@ -49,9 +89,9 @@ might be nice cross-site protection in this case).
 
 Any verb in dog language can optionally be prefixed with one of the following:
 
-fd: because of food
-wg: was a good thing to do
-wb: was a bad thing to do
+- *fd*: because of food
+- *wg*: was a good thing to do
+- *wb*: was a bad thing to do
 
 The verb chase is spelled "woofy" in dog lang.
 
@@ -89,6 +129,10 @@ $ curl -fsSL https://deno.land/x/install/install.sh | sh
 
 # Run the locally created 'dog_dictionary.ts'
 $ deno run -A dog_dictionary.ts
+```
+
+Output would be:
+```
 Created skeleton for new dictionary './dictionary'
 Dictionary editor for './dictionary' is running on localhost:8080
 ```
@@ -102,6 +146,6 @@ For example, I would like to keep the
 
 ## Hard fork
 
-- I would like to give users as many options as possible to avoid hard
+I would like to give users as many options as possible to avoid hard
 forks, so that they can continue to benefit from (and potentially
 contribute) enhancements to the mainline project.
