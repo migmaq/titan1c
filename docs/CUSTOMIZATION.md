@@ -6,6 +6,23 @@ features.
 Instead it is meant to be read as an alternative to a much more complex
 feature - end user configurable dictionary schema.
 
+The current dictionary project, and the first attempt at a successor
+were based on a configurable dictionary schema, with the dictionary
+editor configured by this schema (SIL Toolbox, and the now abandoned
+predecessor to this system).
+
+The issues with fully configurable schema are:
+
+- Because the dictinary editor is automatically generated from the
+  schema, it is necessarily generic - and is not as usable as one that
+  was hand tuned to the model.
+  
+- Most fields require custom code anyway to present and search them nicely, 
+  limiting the benefit.
+
+- Other than for simple field additions or removals, schema evolution
+  once you have collected data is very difficult.
+
 ## Talk to linguists first to try and make as universal an initial model as possible.
 
 In process.
@@ -87,7 +104,8 @@ might be nice cross-site protection in this case).
 
 ## Subclassing top level of system (including data model)
 
-Any verb in dog language can optionally be prefixed with one of the following:
+Any verb in dog language can optionally be prefixed with one of the
+following:
 
 - *fd*: because of food
 - *wg*: was a good thing to do
@@ -136,6 +154,14 @@ Output would be:
 Created skeleton for new dictionary './dictionary'
 Dictionary editor for './dictionary' is running on localhost:8080
 ```
+## Reduce configuration points in order to add a new field
+
+At the minimum you will need to add it to some sort of schema definition, 
+to the editor, and to a word template.
+
+The data files on disk are in a regular format that parses to JSON,
+and most of the internal processing treats them as a generic format.
+This reduces change points for adding to the schema.
 
 ## Support for long lived forks that follow upstream
 
