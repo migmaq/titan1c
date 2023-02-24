@@ -27,9 +27,9 @@ internet access.
 
 ## Deno has typescript support baked in
 
-- for a volunteer project, with multiple contributors working
-  sporadically, and probably less tests than would be ideal, typing is
-  critical.
+For a volunteer project, with multiple contributors working
+sporadically, and probably less tests than would be ideal, typing is
+critical.
 
 ## Javascript is a very popular language with a large community
 
@@ -39,16 +39,16 @@ internet access.
 
 ## The whole system can be written in one language
 
-- we have substantial parts of the system that we have to run in the
-  browser.  Using JS means we will have a single implementation language
-  (for both code and skills reuse).
+We have substantial parts of the system that we have to run in the
+browser.  Using JS means we will have a single implementation language
+(for both code and skills reuse).
 
 ## It is Super easy to run Deno projects
 
 The deno runtime is a single executable file, once the user has downloaded that they can do:
 
 ```
-$ deno run -A https://titan1c.org/dictionary_builder.tsconfig
+$ deno run -A https://titan1c.org/dictionary_builder.ts
 ```
 
 And you will have a running dictionary editor:
@@ -62,13 +62,13 @@ grant than "-A", which disables the sandbox).
 
 ## Deno has sufficient Batteries Included
 
-- Deno has sufficient batteries included, especially the big ticket ones
-  like a web server, that we can have minimal external dependencies.  Which
-  is super important for a long lived project.
+Deno has sufficient batteries included, especially the big ticket ones
+like a web server, that we can have minimal external dependencies.  Which
+is super important for a long lived project.
 
 ## Deno is Sufficiently non-weird that we will be fine if dies
 
-- it would not be a big deal to port to another JS runtime (even node.js)
+It would not be a big deal to port to another JS runtime (even node.js)
 
 ## Node.js is a trainwreck for long-lived projects
 
