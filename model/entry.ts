@@ -1,6 +1,4 @@
-import {Collection, CollectionSnapshot} from './model.ts';
-
-
+import {Collection, CollectionSnapshot} from './lib/collection.ts';
 
 /**
  * Entries
@@ -150,18 +148,24 @@ export class CStatus implements Status {
 }
 
 export class EntryCollection extends Collection<Entry> {
-    load_demo_data() {
-        // this.items = [
-        //     {name: 'Henry', width: 7},
-        //     {name: 'Barry', width: 12},
-        // ];
+    constructor(root_dir: string) {
+        super(root_dir)
+    }
+
+    make_snapshot(): EntrySnapshot {
+        return new EntrySnapshot(this);
     }
 }
 
+// TRICKY: Snapshots at this level may well reference other tables (joins).
 export class EntrySnapshot extends CollectionSnapshot<Entry> {
+
+    constructor(collection: EntryCollection) {
+        super(collection);
+    }
+    
     items_for_category(category_name: string): Entry[] {
         return this.items.filter(
             i => i.categories.some(c => c.category == category_name))
     }
 }
-

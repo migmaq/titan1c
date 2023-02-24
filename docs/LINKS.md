@@ -18,5 +18,3 @@ https://www.robots.ox.ac.uk/~vgg/software/via/via_demo.html
 
 [Deno](https://deno.land/)
 or Python
-
-

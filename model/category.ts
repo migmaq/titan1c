@@ -1,7 +1,7 @@
-import {Collection, CollectionSnapshot} from './model.ts';
+import {Collection, CollectionSnapshot} from './lib/collection.ts';
 
 /**
- * Categories
+ * Category
  */
 export interface Category {
     id: string,

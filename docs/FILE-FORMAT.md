@@ -55,6 +55,9 @@ robust when hand edited (the human part will necessarily change sometimes).
 
 ```toml
 id = 'U8S4IrcSb7f13TXy'
+
+[[subentry]]
+id = 'ldakfjasldfkasldf'
 part_of_speech = 'vat'
 internal_note = ''
 public_note = '''
@@ -314,3 +317,52 @@ For an array, generates:
 ]
 ```
 
+## Document Model
+
+### Dictionary data is stored using a restricted version of the JSON data model.
+
+The two restrictions are:
+
+- all Objects (dictionaries) have a mandatory 'id' field that is a unique
+  within the document (but need not be globally unique across the entire system).
+- arrays contain only Objects (never primitives).
+
+Disadvantages:
+
+- The id's everywhere are ugly, do make things more verbose, and
+  make it more difficult to hand-edit a file.  This overhead is
+  particularly noticeable when the 'child' object has few fields.
+  Id generation will be particularly onerous when hand editing a
+  file.
+
+Advantages:
+
+- Allows for more accurate description of the difference between
+  two documents.  Without id's if someone changes (for example) a
+  definition of a word, we cannot distinguish that from deleting a
+  definition and inserting another one.  This is useful both for change
+  approval and for reconciling changes during resync of a remote clone
+  (for example after non-internet connected field data collection).
+
+- Allows any item in the entire dataset to be referenced (for crossreferences
+  for example) (even though the ids are local to the document, when combined
+  with the document id, they become globally unique ids).
+
+- Makes things like UI tools easier because the data is more regular, and everything
+  has an id.
+
+### Relational model equivalence:
+
+While we have chosen a 'document' format for data sovereignty
+reasons, the restricted data model can be trivially roundtripped to
+an equivalent relational model (dicts become tuples, the ids become primary
+keys (when combined with the document id, a foreign key reference is added to the
+parent object, and an order field is added).
+
+Thinking about the model this way is useful for design discipline.
+
+But it also gives the user more options for how to process data.
+For example, I would like to add a step to the publish process that
+creates an equivalent SQLite data base file that can be used by
+researchers to do ad-hoc queries (or datalog or whatever).
+ 
