@@ -1,4 +1,4 @@
-# Why DENO
+# Why Typescript on DENO
 
 We are proposing writing the dictionary software in typescript (a
 variant of javascript with type annotations) and running the server
@@ -11,7 +11,7 @@ browser model as possible (including sandboxing).
 
 Because the dictionary builder is written is Javascript, it will be relatively easy to port to:
 
-- Running as
+- Running as a
   [PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
   will allow running disconnected in web browsers or phones.
 - If it desired to get around Apples prejudice against PWA's, one
@@ -26,22 +26,26 @@ researchers need to work in situations where they do not have reliable
 internet access.
 
 ## Deno has typescript support baked in
+
 - for a volunteer project, with multiple contributors working
   sporadically, and probably less tests than would be ideal, typing is
   critical.
 
 ## Javascript is a very popular language with a large community
+
 - it is likely to be supported for a long time.
 - Javascript (unlike python) has a language specification and multiple
   widely used fully compatible implementations.
 
 ## The whole system can be written in one language
+
 - we have substantial parts of the system that we have to run in the
   browser.  Using JS means we will have a single implementation language
   (for both code and skills reuse).
 
 ## It is Super easy to run Deno projects
-- the deno runtime is a single executable file, once the user has downloaded that they can do:
+
+The deno runtime is a single executable file, once the user has downloaded that they can do:
 
 ```
 $ deno run -A https://titan1c.org/dictionary_builder.tsconfig
@@ -57,14 +61,17 @@ Dictionary editor for './dictionary' is running on localhost:8080
 grant than "-A", which disables the sandbox).
 
 ## Deno has sufficient Batteries Included
+
 - Deno has sufficient batteries included, especially the big ticket ones
   like a web server, that we can have minimal external dependencies.  Which
   is super important for a long lived project.
 
 ## Deno is Sufficiently non-weird that we will be fine if dies
+
 - it would not be a big deal to port to another JS runtime (even node.js)
 
 ## Node.js is a trainwreck for long-lived projects
+
 - node.js encourages a style where you have a massive number of
   fragile dependencies, pre-processors, bundlers etc.
 - as a group project, if we use node.js, there will always be pressure
