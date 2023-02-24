@@ -31,17 +31,56 @@ export interface Entry {
     status: Status[],
 }
 
-export interface OrthoText {
+export class CEntry implements Entry {
+    _id: string = '';
+    public_id: string = '';
+    part_of_speech: string = '';   // switch to enum
+    internal_note: string = '';
+    public_note: string = '';
+    last_modified_date: string = '';
+
+    spellings: OrthoText[] = [new COrthoText()];
+    definitions: Definition[] = [new CDefinition()];
+    glosses: Gloss[] = [new CGloss()];
+    examples: Example[] = [new CExample()];
+
+    pronunciation_guide: OrthoText[] = [new COrthoText()];
+    
+    categories: Category[] = [new CCategory()];
+    related_entries: RelatedEntry[] = [new CRelatedEntry()];
+
+    alternate_grammatical_forms: AlternateGrammaticalForm[] = [new CAlternateGrammaticalForm()];
+    other_regional_forms: OtherRegionalForm[] = [new COtherRegionalForm()];
+    other_attrs: OtherAttrs[] = [new COtherAttrs()];
+    
+    status: Status[] = [new CStatus()];
+}
+
+
+
+interface OrthoText {
     variant: string,
     text: string,
+}
+
+export class COrthoText implements OrthoText {
+    variant: string = '';
+    text: string = '';
 }
 
 interface Definition {
     definition: string,
 }
+export class CDefinition implements Definition {
+    definition: string = '';
+}
 
 interface Gloss {
     gloss: string,
+}
+
+export class CGloss implements Gloss {
+    gloss: string = ''
 }
 
 interface Example {
@@ -49,33 +88,65 @@ interface Example {
     text: OrthoText[],
 }
 
-export interface AlternateGrammaticalForm {
+export class CExample implements Example {
+    translation: string = '';
+    text: OrthoText[] = [new COrthoText()];
+}
+
+interface AlternateGrammaticalForm {
     gloss: string,
     grammatical_form: string,
     text: OrthoText[],
 }
 
-export interface Category {
+export class CAlternateGrammaticalForm implements AlternateGrammaticalForm {
+    gloss: string ='';
+    grammatical_form: string = '';
+    text: OrthoText[] = [new COrthoText()];
+}
+
+interface Category {
     category: string,
 }
 
-export interface RelatedEntry {
-    unresolved_text: string,
+export class CCategory implements Category {
+    category: string = '';
 }
 
-export interface OtherRegionalForm {
+interface RelatedEntry {
+    unresolved_text: string,
+}
+export class CRelatedEntry implements RelatedEntry {
+    unresolved_text: string = '';
+}
+
+interface OtherRegionalForm {
     text: string,
 }
 
-export interface OtherAttrs {
+export class COtherRegionalForm implements OtherRegionalForm {
+    text: string = '';
+}
+
+interface OtherAttrs {
     attr: string,
     value: string,
 }
 
-export interface Status {
+export class COtherAttrs implements OtherAttrs {
+    attr: string = '';
+    value: string = '';
+}
+
+interface Status {
     variant: string,
     status: string,
     details: string,
+}
+export class CStatus implements Status {
+    variant: string = '';
+    status: string = '';
+    details: string = '';
 }
 
 export class EntryCollection extends Collection<Entry> {
