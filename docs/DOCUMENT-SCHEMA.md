@@ -36,7 +36,7 @@ lot more complicated than we need - our data model is a subset of JSON.  But
 this is still a possible choice.
 
 But another choice that I am interested in is representing the schema
-using our own [data model](./DATA-MODEL.toml) (ie .toml, with our
+using our own [data model](./DATA-MODEL.md) (ie .toml, with our
 representation restrictions).
 
 The advantage of this is that the data model would then live in our 'database',
