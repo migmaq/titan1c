@@ -90,7 +90,7 @@ It would not be a big deal to port to another JS runtime (even node.js)
 - this is particularly problematic for long-lived projects - if you stop
   actively maintaining your dependencies for over 15 minutes on a node.js
   project, it becomes permanently unrunnable (because it is so
-  frustrating to resolve that you just give up instead).
+  frustrating to resolve the breakage that you just give up instead).
 - even if Deno dies and we end up porting to node.js - having implemented
   using Deno will have forced us away from this crazy.
 

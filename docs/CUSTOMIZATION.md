@@ -124,7 +124,7 @@ could subclass the entire dictionary builder software by creating a
 import {DictionaryProject} from 'https://titan1c.org/titan1c@1.0/dictionary.ts';
 
 export class DogDictionaryProject extends DictionaryProject {}
-export namespace MyDictionaryProject {
+export namespace DogDictionaryProject {
    export class Search extends DictionaryProject.Search {
       expand_search(search: string): string[] {
          return [search, search.replace(/^(sq)|(wg)|(wb)/, '')]
