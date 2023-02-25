@@ -34,7 +34,7 @@ critical.
 ## Javascript is a very popular language with a large community
 
 - it is likely to be supported for a long time.
-- Javascript (unlike python) has a language specification and multiple
+- Javascript has a language specification and multiple
   widely used fully compatible implementations.
 
 ## The whole system can be written in one language
