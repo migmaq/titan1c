@@ -27,17 +27,17 @@ Here are example filenames for a site with 3 words ("agase'wa'latl",
 "agase'wa'toq" and "egiljet") and one site page ("about-us").
 
 ```
-migmaq/entries/a/agase_wa_latl--C5B5mKYeKNQAHbSKhRK9/entry.toml
-migmaq/entries/a/agase_wa_latl--C5B5mKYeKNQAHbSKhRK9/recording-c519671596cbd25461fa9ae7c229f034.wav
+migmaq/entries/a/agase_wa_latl-8329/entry.toml
+migmaq/entries/a/agase_wa_latl-8329/recording-c519671596cbd25461fa9ae7c229f034.wav
 
-migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/entry.toml
-migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/recording-fa923984232139843299348234838838.wav
-migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/example-393984193fad48921734238748478388.wav
-migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/image-c519671596cbd25461fa9ae7c229f034.png
+migmaq/entries/a/agase_wa_toq-8400/entry.toml
+migmaq/entries/a/agase_wa_toq-8400/recording-fa923984232139843299348234838838.wav
+migmaq/entries/a/agase_wa_toq-8400/example-393984193fad48921734238748478388.wav
+migmaq/entries/a/agase_wa_toq-8400/image-c519671596cbd25461fa9ae7c229f034.png
 
-migmaq/entries/e/egiljet--CCCKDdaslfkjmaszl833833/entry.toml
+migmaq/entries/e/egiljet-6201/entry.toml
 
-migmaq/pages/a/about-us--32984721384234892443842/page.toml
+migmaq/pages/a/about-us-1000/page.toml
 ```
 
 This sample site has 2 collections: "entries" and "pages".
@@ -64,21 +64,21 @@ participate in the versioning schemes - which is a tremendous
 simplification.  These filenames are typically referenced from the
 .toml files.  A garbage collector will eventually be required.
 
-The proposed id scheme for entities is: HUMAN_FRIENDLY_ID "--" GLOBALLY_UNIQUE_ID
+The proposed id scheme for entities is: HUMAN_FRIENDLY_ID "-" UNIQUE_IN_COLLECTION_ID
 
 An unusual property of the id system is that only the globally unique
 part participates in id comparison.  So
-"david-ziegler--32984721384234892443842" and
-"david-zeigler--32984721384234892443842" would be considered the same
+"david-ziegler-83" and
+"david-zeigler-83" would be considered the same
 id.
 
 This is a compromise.  If we only used the unique id portion - data files
 (and filenames) would not be readable by people.
 
 ```
-recorded_by = "32984721384234892443842"
+recorded_by = "83"
 VS:
-recorded_by = "david-ziegler--32984721384234892443842"
+recorded_by = "david-ziegler-83"
 ```
 
 If we only use the human readable portion, any time someone changed
@@ -86,6 +86,14 @@ the id of an entry all references to that entity would be broken, and
 there would be no automated way of fixing them.
 
 But yes, it is a bit ugly.
+
+(When working on remote replicas, long random ids will be used, but will
+be translated back to short id allocation when merge - details needed)
+
+(These ids are not unique across entity types - but that is fine).
+
+When a human is editing a file, they can leave off the global part of the id,
+and the system will provide it at next cleanup.  (think more).
 
 ## Sample entry.toml
 ```toml
@@ -123,7 +131,7 @@ gloss = 'report of'
 
 [[recording]]
 id = 38193
-speaker = 'dmm-adlkf234383'
+speaker = 'dmm-7'
 recording = 'recording-c519671596cbd25461fa9ae7c229f034.wav'
 variant = 'mm-li'
 
@@ -143,7 +151,7 @@ translation = 'Tom talks about Joseph.'
 
     [[examples.recording]]
     id = 139
-    speaker = 'dmm-adlkf234383'
+    speaker = 'dmm-71'
     recording = 'example-c519671596cbd25461fa9ae7c229f034.wav'
     variant = 'mm-li'
 
@@ -203,14 +211,14 @@ grammatical_form = '3-1'
     variant = 'mm-sf'
 
 [[categories]]
-category = 'communication--98321123984123'
+category = 'communication-9'
 
 [[categories]]
-category = 'speech--1239841239813'
+category = 'speech-1'
 
 [[attrs]]
 id = 126
-attr = 'scientific_name--91237841293229'
+attr = 'scientific_naeme-1'
 value = '...'
 ```
 
