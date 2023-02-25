@@ -42,6 +42,11 @@ If current.toml is hand edited, system will generate a 'history' record for it.
 If published-li.toml is hand edited???   System will still work, just will have
 broken history (and will know that).
 
+In this model "current.toml", "published-li.toml" etc can be treated as names into
+the history model by reading their content and computing the SHA.
+
+This is very much an initial sketch - much more thinking required.
+
 ISSUES: 
 - sometimes we want multiple approvers.
 - sometimes approvers are per locale (ie. a mm-sf approver cannot approve a
@@ -56,61 +61,92 @@ ISSUES:
 ## Entry Diff algorithm
 - takes two (JSON) objects, with the restriction that every 'dict', has an id field,
   and that all arrays are arrays of 'dict's.
-- generates a difference in the form:
+
+A simple field update might look like:
 
 ```json
 {
-  op: 'update',
+  op: 'update_field',
   ref: '3189423',
-  name: { from: 'David', to: 'Dave' },
+  field: 'first_name',
+  from: 'Dave',
+  to: 'David'
 }
 
 ```
 
-For an array, generates:
+A update to an array, recursively updating a child array might look like:
+
+(this example might be borked, I haven't put much effort into it).
 
 ```json
 [
   {
      op: 'insert_after',
      ref: '38139421',
-     data: {},
+     data: {
+        id: 7373,
+        name: 'David'
+     },
   },
   {
     op: 'delete',
     ref: '1341922',
   },
   {
-    op: 'update',
+    op: 'update_field',
     ref: '1299233',
-    name: { from: 'David', to: 'Dave' },
+    field: 'first_name',
+    from: 'Dave',
+    to: 'David'
+  },
+  {
+    op: 'update_array_field',
+    ref: '331243'
+    field: 'examples',
+    ops: [
+       {
+         op: 'delete',
+         ref: '1323',
+       },
+    ]
   }
 ]
 ```
 
-
-
 ## Using Git for revision control: working dir method
 
+Linear git history, approving changes to a word commit the changes.
 
+The directory used for dictionary editing is a working directory with
+uncommitted changes.
 
+The directory used for generating the pushed site is a pull of the committed
+tip from git.
 
+### Issues with this scheme
+- no tracking of changes between commits (if Sally makes a change, then Bob does,
+  we will need some on the side mechanism to track this).
+- issues with support for remote clones (if we allow multiple committors, with these
+  long running checkouts, we are likely to get into situations that regular users
+  can't easily recover from).
+- if use CLI git, will be in the business of git response parsing (might be solved
+  with isomorphic git).
+- no obvious way to have separate approval for different orthographies
+  (an Migmaq online requirement).
 
+## Using Git for revision control: branch per word that is under edit
+- write details here.
 
-### If we use git, we may be forced to use a layout like:
-
-```
-data/entries/a/agnimatl--U8S4IrcSb7f13TXy.toml
-
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-media/entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
-```
-
-With only the data/ tree in git. (Because of issues with putting lots
-of binary files in git).
-
-## Using git for revision control?
+## Issue with binary files in git
+- putting the media in git should be fine - the total size is manageable, and
+  media are seldom updated, so the git limitation that the binary files are
+  never garbage collected won't cause too much problem.
+- having to clone all the binary data to all users is a bit irritating.
+- cloning the binary data to the browser will push browser limits. (if we
+  use isomorphic-git)
+  
+## Other git notes
 - if have to use cli git, will end up doing lots of parsing - which could be 
   a huge, fragile nuisance.
 - if use something like
@@ -121,30 +157,4 @@ of binary files in git).
   structure of the file - so will be text based, which is less good)
 - the edit merging will also have to be on top of this text level diffing.
 - maybe can do our own more content-aware merging on top of this the git api?
-
-
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/history/2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
-```
-
-### Files for the auto-generated published version of a dictionary entry
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/index.html
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034-200x200.jpg
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
-```
-
-
-
-
-
 

@@ -43,6 +43,16 @@ We have substantial parts of the system that we have to run in the
 browser.  Using JS means we will have a single implementation language
 (for both code and skills reuse).
 
+## Our primary format is JSON and JavaScript/TypeScript is really good at JSON Data
+
+This make templates and so on much nicer and easier to understand.
+
+## JavaScript is crazy fast
+
+JS is a hostile language to optimize - but with crazy investment, it is
+a quite fast language.  This benefits us because it is nice if a full
+site rebuild is fast.
+
 ## It is Super easy to run Deno projects
 
 The deno runtime is a single executable file, once the user has downloaded that they can do:

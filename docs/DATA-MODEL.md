@@ -1,6 +1,27 @@
 # Proposed on disk representation of dictionary (and site) data set
 
-## Sample site data file layout
+## Summary
+
+One directory per word, each containing a "entry.toml" file and associated media.  Toml
+is a more human friendly syntax for JSON.
+
+Other kinds of entity use the same arrangement (categories, site
+pages, users, configuration data for language learning games etc).
+
+The site generator slurps up all the .toml files, and generates a complete .html site
+(driven by user-customizable templates).  There is no server process active while
+the user is interacting with the site.
+
+Users can directly edit the .toml files.
+
+Or they can use the dictionary editor, that provides a web-based
+editor for the dictionary data (changed are then written to the .toml
+files).
+
+There is also a revision control and approval layer, that this model is designed
+to support - but that is detailed in a separate document.
+
+## Sample site directory structure
 
 Here are example filenames for a site with 3 words ("agase'wa'latl",
 "agase'wa'toq" and "egiljet") and one site page ("about-us").
@@ -12,6 +33,7 @@ migmaq/entries/a/agase_wa_latl--C5B5mKYeKNQAHbSKhRK9/recording-c519671596cbd2546
 migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/entry.toml
 migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/recording-fa923984232139843299348234838838.wav
 migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/example-393984193fad48921734238748478388.wav
+migmaq/entries/a/agase_wa_toq--9234829134829838SDD33/image-c519671596cbd25461fa9ae7c229f034.png
 
 migmaq/entries/e/egiljet--CCCKDdaslfkjmaszl833833/entry.toml
 
@@ -50,7 +72,7 @@ part participates in id comparison.  So
 "david-zeigler--32984721384234892443842" would be considered the same
 id.
 
-This is a compromise.  If we only used the unique portion - data files
+This is a compromise.  If we only used the unique id portion - data files
 (and filenames) would not be readable by people.
 
 ```
@@ -64,7 +86,6 @@ the id of an entry all references to that entity would be broken, and
 there would be no automated way of fixing them.
 
 But yes, it is a bit ugly.
-
 
 ## Sample entry.toml
 ```toml
@@ -209,7 +230,8 @@ Disadvantages:
   make it more difficult to hand-edit a file.  This overhead is
   particularly noticeable when the 'child' object has few fields.
   Id generation will be particularly onerous when hand editing a
-  file.
+  file (duplicate ids are an error - so you will not corrupt things
+  if you introduce duplicate ids - just get a message).
 
 Advantages:
 
@@ -218,7 +240,9 @@ Advantages:
   definition of a word, we cannot distinguish that from deleting a
   definition and inserting another one.  This is useful both for change
   approval and for reconciling changes during resync of a remote clone
-  (for example after non-internet connected field data collection).
+  (for example after non-internet connected field data collection).  Also really
+  nice when doing a 3-way merge with a common ancestor for when disconnected
+  clones reattach.
 
 - Allows any item in the entire dataset to be referenced (for crossreferences
   for example) (even though the ids are local to the document, when combined
@@ -243,13 +267,9 @@ creates an equivalent SQLite data base file that can be used by
 researchers to do ad-hoc queries (or datalog or whatever).
  
 
-
-
-
-
 ## Globally Unique IDs used thoughout the data model
 
-Propose using nanoid UUID alternative:
+We propose using nanoid UUID alternative:
 
 https://zelark.github.io/nano-id-cc/
 
@@ -272,59 +292,6 @@ Sample id: C5B5mKYeKNQAHbSKhRK9
   - much nicer complex structures.
   - multi line strings
   - no need to quote key names
-  
-## Details of representation
 
 - While Toml does not define a key order, we are free to implement our 
   own serializer that uses the conventions and order we want.
-
-- This sample has ids for every element in every array.  This does add verbosity,
-  and is a nuisance when editing by hand.  The reason they are (tentatively) proposed
-  is that they allow accurate change reporting.   Without ids, you can't (for example)
-  tell the difference between editing an exiting spelling, and both deleting an existing
-  spelling and adding a new one.
-
-- media is represented with links to a filename in the same directory,
-  the filename includes the SHA of the content in the filename.
-  (There will have to be GC passes).
-  
-- large binary files don't play well with git, so if we are using git, they will
-  probably have to be in a parallel tree, which is sad.
-  
-- a proposed id format is human_friendly_id--globally_unique_nano_id
-
-- directories would be labelled with this id format.
-
-The human_friendly part is ignored for key equality.  This makes the format much more
-robust when hand edited (the human part will necessarily change sometimes).
-
-### Sample dictionary entry encoded in TOML:
-
-  
-### Files for an dictionary entry
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/current.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034.png
-entries/a/agnimatl--U8S4IrcSb7f13TXy/history/2023-10-29_15-12-33_17773_949d3_dziegler__17773f830a466ffba9c126a76a8de8cf_949d33baea2e27d01b65a75cd43f8d29_838123333_18243819adaffsffad.toml
-```
-
-### Files for the auto-generated published version of a dictionary entry
-
-```
-entries/a/agnimatl--U8S4IrcSb7f13TXy/index.html
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.wav
-entries/a/agnimatl--U8S4IrcSb7f13TXy/recording-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/example-c519671596cbd25461fa9ae7c229f034.mp3
-entries/a/agnimatl--U8S4IrcSb7f13TXy/image-c519671596cbd25461fa9ae7c229f034-200x200.jpg
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-li.toml
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.json
-entries/a/agnimatl--U8S4IrcSb7f13TXy/published-sf.toml
-```
-
