@@ -164,7 +164,7 @@ export class EntrySnapshot extends CollectionSnapshot<Entry> {
         super(collection);
     }
     
-    items_for_category(category_name: string): Entry[] {
+    @cache items_for_category(category_name: string): Entry[] {
         return this.items.filter(
             i => i.categories.some(c => c.category == category_name))
     }
