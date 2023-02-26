@@ -1,4 +1,5 @@
 import {Collection, CollectionSnapshot} from './lib/collection.ts';
+import * as utils from "../utils/utils.ts";
 
 /**
  * Entries
@@ -158,14 +159,21 @@ export class EntryCollection extends Collection<Entry> {
 }
 
 // TRICKY: Snapshots at this level may well reference other tables (joins).
+// we can pass them into the constructor when we need to do that.
 export class EntrySnapshot extends CollectionSnapshot<Entry> {
 
     constructor(collection: EntryCollection) {
         super(collection);
     }
-    
-    @cache items_for_category(category_name: string): Entry[] {
+
+    // TODO: get @lazy decorator working
+    entries_for_category(category_name: string): Entry[] {
         return this.items.filter(
             i => i.categories.some(c => c.category == category_name))
+    }
+
+    entries_by_category_id(): Map<string, Entry[]> {
+        return utils.multi_partition_by(this.items,
+                                        i=>i.categories.map(c=>c.category));
     }
 }

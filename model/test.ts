@@ -19,7 +19,7 @@ async function main_off() {
 
     let snap = entries.make_snapshot();
 
-    console.info(snap.items_for_category("location"));
+    console.info(snap.entries_for_category("location"));
 }
 
 async function main() {
@@ -31,7 +31,7 @@ async function main() {
 
     let snap = dict.snapshot();
 
-    console.info(snap.entries.items_for_category("location"));
+    console.info(snap.entries.entries_for_category("location"));
 }
 
 

@@ -35,8 +35,7 @@ export abstract class CollectionI {
  *
  */
 export class Collection<T> extends CollectionI {
-    items: T[] = [];
-    
+    items_by_id: Map<string,T> = new Map();
 
     constructor(root_dir: string) {
         super(root_dir)
@@ -46,19 +45,22 @@ export class Collection<T> extends CollectionI {
         // --- Load all the toml from the collection tree (paired with filename)
         const raw_items: [string, any][] = await load_collection_raw(this.root_dir);
 
-        // --- Extract id from filename and add to entries as 'id' field
-        //     (XXX should also be verifying cluster here)
-        const items = raw_items.map(([filename, data]: [string, any]) => {
+        // --- Preprocess loaded items
+        for(const [filename, data] of raw_items) {
+
+            // --- Add the item id (that came from the container) to the
+            //     entity itself.
             data['id'] = posix.basename(filename);
-            return data
-        });
-        
-        // --- TODO: validation here!
 
-        // --- Freeze all data items
-        items.forEach(item=>document.deepFreeze(item));
+            // --- TODO: do some validation here?
+            
+            // --- Deep freeze all data item (making them immutable so they can
+            //     be shared without worrying that someone will mute them).
+            document.deepFreeze(data);
+        }        
 
-        this.items = items;
+        // --- Build items-by-id map
+        this.items_by_id = new Map(raw_items);
     }
 }
 
@@ -75,10 +77,13 @@ export class CollectionSnapshot<T> {
     items_by_id: Map<string, T>;
 
     constructor(collection: Collection<T>) {
-        this.items = collection.items;
-        this.items_by_id = Map(items.map(i=>[i.id, i]));
-        // TODO: add check/error for id collisions.
-        // TODO: do new id scheme (with compare only on unique part)
+        // --- Snapshot gets a point-in-time top-level clone of the collections
+        //     items_by_id Map.
+        this.items_by_id = new Map(collection.items_by_id);
+        
+        // --- We also make an array of the items, for quicker scans (our usual
+        //     access method)
+        this.items = [...this.items_by_id.values()];
     }
 }
 

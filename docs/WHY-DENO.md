@@ -49,9 +49,10 @@ This make templates and so on much nicer and easier to understand.
 
 ## JavaScript is crazy fast
 
-JS is a hostile language to optimize - but with crazy investment, it is
-a quite fast language.  This benefits us because it is nice if a full
-site rebuild is fast.
+JS is a hostile language to optimize - but crazy attention has been
+invested in optimizing javascript despite this - and current
+implementations are quite fast.  This benefits us because it is nice
+if a full site rebuild is fast.
 
 ## It is Super easy to run Deno projects
 

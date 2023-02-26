@@ -77,7 +77,9 @@ For less common configuration, users can edit the .toml configuration
 directly (including multi-line strings containing templates etc).
 This can be done over the web using a browser-based editor if desired.
 
-## Customization using JS in the configuration data (including templates with JS expressions)
+## NOT Customization using JS in the configuration data (including templates with JS expressions)
+
+*On further thought - I think this is a bad idea*
 
 I would like to allow configuration data (both templates and
 configuration files) to contain javascript code.
