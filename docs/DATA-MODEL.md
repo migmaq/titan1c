@@ -107,116 +107,116 @@ multi-line
 note.
 '''
 
-[[spelling]]
+[[subentry.spelling]]
 id = 134
 text = 'agnimatl'
 variant = 'mm-li'
 
-[[spelling]]
+[[subentry.spelling]]
 id = 135
 text = 'aknimatl'
 variant = 'mm-sf'
 
-[[definitions]]
+[[subentry.definitions]]
 id = 137
 definition = 'He/she talks about him/her'
 
-[[glosses]]
+[[subentry.glosses]]
 id = 141
 gloss = 'talk about'
 
-[[glosses]]
+[[subentry.glosses]]
 id = 191
 gloss = 'report of'
 
-[[recording]]
+[[subentry.recording]]
 id = 38193
 speaker = 'dmm-7'
 recording = 'recording-c519671596cbd25461fa9ae7c229f034.wav'
 variant = 'mm-li'
 
-[[examples]]
+[[subentry.examples]]
 id = 138
 translation = 'Tom talks about Joseph.'
 
-    [[examples.text]]
+    [[subentry.examples.text]]
     id = 139
     text = "Tuma agnimatl So'sepal."
     variant = 'mm-li'
 
-    [[examples.text]]
+    [[subentry.examples.text]]
     id = 140
     text = "Tuma aknimatl So'sepal."
     variant = 'mm-sf'
 
-    [[examples.recording]]
+    [[subentry.examples.recording]]
     id = 139
     speaker = 'dmm-71'
     recording = 'example-c519671596cbd25461fa9ae7c229f034.wav'
     variant = 'mm-li'
 
-    [[examples.text]]
+    [[subentry.examples.text]]
     id = 140
     text = "Tuma aknimatl So'sepal."
     variant = 'mm-sf'
 
-[[pronunciation_guide]]
+[[subentry.pronunciation_guide]]
 id = 136
 text = 'a·gê·ni·ma·dêl'
 variant = 'mm-li'
 
-[[alternate_grammatical_forms]]
+[[subentry.alternate_grammatical_forms]]
 id = 143
 gloss = 'I talk about him/her'
 grammatical_form = '1-3'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 144
     text = 'agnimg'
     variant = 'mm-li'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 145
     text = 'aknimk'
     variant = 'mm-sf'
 
-[[alternate_grammatical_forms]]
+[[subntry.alternate_grammatical_forms]]
 id = 146
 gloss = 'I talk about you'
 grammatical_form = '1-2'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 147
     text = 'agnimul'
     variant = 'mm-li'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 148
     text = 'aknimul'
     variant = 'mm-sf'
 
-[[alternate_grammatical_forms]]
+[[subentry.alternate_grammatical_forms]]
 id = 149
 gloss = 'he/she talks about me'
 grammatical_form = '3-1'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 150
     text = 'agnimit'
     variant = 'mm-li'
 
-    [[alternate_grammatical_forms.text]]
+    [[subentry.alternate_grammatical_forms.text]]
     id = 151
     text = 'aknimit'
     variant = 'mm-sf'
 
-[[categories]]
+[[subentry.categories]]
 category = 'communication-9'
 
-[[categories]]
+[[subentry.categories]]
 category = 'speech-1'
 
-[[attrs]]
+[[subentry.attrs]]
 id = 126
 attr = 'scientific_naeme-1'
 value = '...'
