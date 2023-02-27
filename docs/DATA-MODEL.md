@@ -121,9 +121,15 @@ variant = 'mm-sf'
 id = 137
 definition = 'He/she talks about him/her'
 
+[[subentry.definitions]]
+id = 129
+definition = 'Lorem ipsum dolor sit amet'
+variant = 'mm-li'
+
 [[subentry.glosses]]
 id = 141
 gloss = 'talk about'
+varant = 'en'
 
 [[subentry.glosses]]
 id = 191
@@ -136,8 +142,10 @@ recording = 'recording-c519671596cbd25461fa9ae7c229f034.wav'
 variant = 'mm-li'
 
 [[subentry.examples]]
-id = 138
-translation = 'Tom talks about Joseph.'
+    [[subentry.examples.text]]
+    id = 138
+    text = 'Tom talks about Joseph.'
+    varant = 'en'
 
     [[subentry.examples.text]]
     id = 139
