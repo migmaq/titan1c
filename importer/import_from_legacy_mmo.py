@@ -4,13 +4,14 @@ import json
 import sys
 from pathlib import Path
 import re
-import mmodb
-import util
+#import mmodb
+#import util
 import os
 import rtoml
 import tomli_w
 import pytomlpp
 from pathlib import Path
+import gzip
 
 sys.stdin.reconfigure(encoding='utf-8')
 sys.stdout.reconfigure(encoding='utf-8')
@@ -23,7 +24,9 @@ def import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=False):
 
     # Load lexemes we have exported from legacy mmo
     mmo_json = None
-    with open('import-data/legacy-mmo.json') as f:
+    mmo_gzip_path = os.path.dirname(__file__)+'/legacy-mmo.json.gz';
+    print('Reading legacy mmo data from', mmo_gzip_path)
+    with gzip.open(mmo_gzip_path) as f:
         mmo_json = json.load(f)
     assert len(mmo_json) == 1, f"Expected root of mmo.json to be dict with one key"
     lexemes = mmo_json['lexemes']
@@ -71,16 +74,17 @@ def import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=False):
     #import_json_into_db(model, entries)
 
     # import into fs
-    import_json_into_fs(model, entries)
+    import_json_into_fs(None, entries)
     
     # spew new format to JSON
     # Note: we are doing this after import to DB so that we can see the
     #       _id fields that get added int the db import process
-    with open('import-data/entries.json', 'w') as f:
+    os.makedirs('mmo/import-results')
+    with open('mmo/import-results/entries.json', 'w') as f:
         json.dump(entries, f, sort_keys=False, indent=2, ensure_ascii=False)
 
     # spew leftovers to JSON
-    with open('import-data/leftovers.json', 'w') as f:
+    with open('mmo/import-results/leftovers.json', 'w') as f:
         json.dump(lexemes, f, sort_keys=False, indent=2, ensure_ascii=False)
     
 def import_json_into_fs(model, entries):
@@ -88,7 +92,7 @@ def import_json_into_fs(model, entries):
     for e in entries:
         public_id = e['public_id']
         assert public_id, 'Missing or empty public_id'
-        entry_dir = f'entries/{public_id[0]}/{public_id}'
+        entry_dir = f'mmo/entries/{public_id[0]}/{public_id}'
         os.makedirs(entry_dir, mode=0o777, exist_ok=True)
         entry_file = f'{entry_dir}/data.toml'
         #e = {'cat': 7}
@@ -202,8 +206,8 @@ def convert_sense(id_allocator, legacy_lexemes_by_name, date, lexeme, note, stat
     # - Related lexemes.
     # - related_entries
     related_entries_text = sense.pop('crossRef').strip()
-    related_entries_text = util.stripOptSuffix(related_entries_text, '.')
-    related_entries_text = util.stripOptSuffix(related_entries_text, ',')
+    related_entries_text = stripOptSuffix(related_entries_text, '.')
+    related_entries_text = stripOptSuffix(related_entries_text, ',')
     related_entries_text = related_entries_text.replace(' and ', ',')
     related_entries = re.split(r"[ ]*,[ ]*", related_entries_text)
     related_entries = list(filter(lambda v: v, related_entries))
@@ -353,8 +357,15 @@ def ortho_text_record(id_allocator, selector, text):
         'text': text
     }    
 
+def stripOptSuffix (s, suffix):
+    return s[:-len(suffix)] if s.endswith (suffix) else s
+
+def stripOptPrefix (s, prefix):
+    return s[len(prefix):] if s.startswith (prefix) else s
+
+
 if __name__ == "__main__":
-    if sys.argv[1:] == ['import_legacy_mmo', '--i_realize_that_this_will_nuke_the_working_mmo_db']:
+    if sys.argv[1:2] == ['import'] or sys.argv[1:] == ['import', '--i_realize_that_this_will_nuke_the_working_mmo_db']:
         import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=True)
         print('Legacy mmo imported')
     else:
