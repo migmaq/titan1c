@@ -36,6 +36,7 @@ export abstract class CollectionI {
  */
 export class Collection<T> extends CollectionI {
     items_by_id: Map<string,T> = new Map();
+    items: T[] = [];
 
     constructor(root_dir: string) {
         super(root_dir)
@@ -50,7 +51,8 @@ export class Collection<T> extends CollectionI {
 
             // --- Add the item id (that came from the container) to the
             //     entity itself.
-            data['id'] = posix.basename(filename);
+            // XXX this is wrong, and we are planning to put the ide in the entries anyway
+            //data['id'] = posix.basename(filename);
 
             // --- TODO: do some validation here?
             
@@ -61,6 +63,9 @@ export class Collection<T> extends CollectionI {
 
         // --- Build items-by-id map
         this.items_by_id = new Map(raw_items);
+
+        // --- Build items list
+        this.items = raw_items.map(([filename, data]) => data);
     }
 }
 

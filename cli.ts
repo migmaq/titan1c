@@ -1,6 +1,7 @@
 import { CustomError} from './utils/errors.ts';
 import { parse as parse_args } from 'https://deno.land/std@0.175.0/flags/mod.ts';
 import { Titan1c } from './titan1c.ts';
+import {DictionaryData, DictionarySnapshot} from "./model/dictionary-data.ts";
 
 /**
  * Titan1c command line
@@ -69,11 +70,20 @@ export class Cli {
             default: { color: true, out_dir: 'published' },
         });
 
-        return this.titan1c.site_generator_factory(flags.out_dir).publish();
+        // TODO XXX: loading the dictionary data directly here is
+        //           maybe a bit skeezy ???  At least the config
+        //           for it needs from somewhere else.
+        const dictionary_data = new DictionaryData("../lexbuilder");
+        console.time("loading dictionary");
+        await dictionary_data.load();
+        console.timeEnd("loading dictionary");
+        const dictionary_snapshot = dictionary_data.snapshot();
+        return this.titan1c.site_generator_factory(dictionary_snapshot,
+                                                   flags.out_dir).publish();
     }
 
     async test_cli(args: string[]): Promise<void> {
-        console.info(this.titan1c.site_generator_factory("published").dictionary_search_page_factory().greet());
+        // console.info(this.titan1c.site_generator_factory("published").dictionary_search_page_factory().greet());
         //this.test();
         return Promise.resolve();
     }

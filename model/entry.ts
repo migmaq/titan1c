@@ -160,6 +160,13 @@ export class EntryCollection extends Collection<Entry> {
 
 // TRICKY: Snapshots at this level may well reference other tables (joins).
 // we can pass them into the constructor when we need to do that.
+
+// ISSUE: we would like this to be extensible, overridable, our current
+//        scheme only works for overriding existing types.  Revist! XXX
+//        (and maybe figure out how not to fight javascripts dynamic
+//        nature).
+// Use proxies to make more stuff avail to templates (we could of
+// course offer a .call filter - but that is much more dangerous).
 export class EntrySnapshot extends CollectionSnapshot<Entry> {
 
     constructor(collection: EntryCollection) {
@@ -176,4 +183,10 @@ export class EntrySnapshot extends CollectionSnapshot<Entry> {
         return utils.multi_partition_by(this.items,
                                         i=>i.categories.map(c=>c.category));
     }
+    // TODO: fix typing here - probably should return a recording subitem.
+    get default_recording(): string {
+        return "XXX";
+    }
+
+    
 }
