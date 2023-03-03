@@ -1,5 +1,5 @@
 _id = 10030
-attrs = []
+other_attrs = []
 body_text = '''multi
 line
 body
@@ -65,7 +65,7 @@ _id = 124
 text = 'a·jip·chu·dohk'
 variant = 'mm-li'
 
-[[spelling]]
+[[spellings]]
 _id = 122
 text = 'ajipjutoq'
 variant = 'mm-li'

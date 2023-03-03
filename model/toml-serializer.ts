@@ -1,70 +1,142 @@
 import { parse as toml_parse, stringify as toml_stringify } from "https://deno.land/std@0.177.0/encoding/toml.ts";
- import {CEntry as Entry} from "./entry.ts";
+import {CEntry as Entry} from "./entry.ts";
+import {createSchema} from "./schema.ts";
 
 
 async function round_trip_test(entry_toml_path: string) {
     const entry_toml_text = await Deno.readTextFile(entry_toml_path);
     const entry = toml_parse(entry_toml_text);
     //console.info(toml_stringify(entry));
-    super_toml_stringify(entry);
+    console.log(super_toml_stringify(entry));
+}
+
+class KeyLists {
+    simple_properties : string[] = [];
+    empty_arrays : string[] = [];
+    arrays : string[] = [];
+    spare : string[] = [];
+    missing : string[] = [];
+}
+
+function key_lister (data : any, template : any) : KeyLists{
+    let key_lists = new KeyLists();
+    for (const key in template) {    
+        if (Array.isArray(template[key])) {
+            if (data.hasOwnProperty(key)) {
+                if (data[key].length === 0) {
+                    key_lists.empty_arrays.push(key);
+                }
+                else {
+                    key_lists.arrays.push(key);                    
+                }
+            }
+            else {
+                key_lists.missing.push(key);
+            }
+        }
+        else {
+            if (data.hasOwnProperty(key)) {
+                key_lists.simple_properties.push(key);
+            }
+            else {
+                key_lists.missing.push(key);
+            }
+
+        }
+    }
+
+    for (const key in data) {    
+        if (!template.hasOwnProperty(key)) {
+            key_lists.spare.push(key);
+        }
+    }
+    // console.log(key_lists)
+    return key_lists;
 }
 
 function super_toml_stringify(data: any): string {
     // console.info(Object.getOwnPropertyNames((new Entry()).categories[0]));
     // console.info(typeof(new Entry()).categories[0]);
-    for (const key in data) {    
-        toml_stringify_data("",key,data[key],0,false);
+    let output = "";
+
+    let schema = createSchema();
+    console.log(schema);
+    const key_lists = key_lister(data,new Entry());
+    // for (const key in data) {    
+    const ordered_list = key_lists.simple_properties.concat(key_lists.empty_arrays).concat(key_lists.arrays);
+    for (const key of ordered_list) {    
+            output = output + toml_stringify_data("",key,data[key],0,false);
     }
-    return "";
+
+    if(key_lists.missing.length > 0) {
+        // throw new Error (`Missing properties :"${key_lists.missing}"`);
+       console.log(`Missing properties :[${key_lists.missing}]`);
+
+    }
+    if(key_lists.spare.length > 0) {
+        // throw new Error (`Unexpected properties :"${key_lists.spare}"`);
+       console.log(`Unexpected properties :[${key_lists.spare}]`);
+
+    }
+
+    return output;
 }
 
-function toml_stringify_data(parent_key: string, key: string, data: any,tabs: number,arr: boolean): string {
+function toml_stringify_array(parent_key: string, key: string, data: any,tabs: number): string {
     const tab = "   ";
-    const tab_text = tab.repeat(tabs);
+    let full_key = key;
+    if (parent_key !=="") { full_key = `${parent_key}.${key}` ; }
+
+    if (data.length === 0) {
+        // console.info(`${tab.repeat((tabs < 1) ? 0 : tabs-1)}${key} = []`);
+        return `${tab.repeat((tabs < 1) ? 0 : tabs-1)}${key} = []\n`;
+    }
+    else {
+        let output = "";
+        for (const element of data){
+            // console.info(`\n${tab.repeat(tabs)}[[${full_key}]]`);
+            output = output + `\n${tab.repeat(tabs)}[[${full_key}]]\n`;
+            output = output + toml_stringify_data("",full_key,element,tabs,true);
+        }
+        return output;
+    }
+}
+function toml_stringify_data(parent_key: string, key: string, data: any,tabs: number,arr: boolean,): string {
+    const tab = "   ";
     let type = "";
     let full_key = key;
     if (parent_key !=="") { full_key = `${parent_key}.${key}` ; }
-    if (Array.isArray(data)) { type = "array";}
+    if (Array.isArray(data)) {
+        type = "array";}
     else { type = typeof(data); }
-    // console.info(tab_text, "Type:", type);
     
     switch (type)
     {
         case "object":
-            // console.info(tab_text, "{");
+            let output = "";
             for (const curkey in data) {
-                // console.info (tab + tab_text, "key:",key);
-                toml_stringify_data(full_key,curkey, data[curkey],tabs+1,arr);
+                output = output + toml_stringify_data(full_key,curkey, data[curkey],tabs+1,arr);
             }
-            // console.info(tab_text, "}");
+            return output;
             break;
         case "array":
-            if (data.length === 0) {
-                console.info(`${tab.repeat(tabs)}${full_key}= []`);
-            }
-            else {
-                // console.info(tab_text, key, "= [");
-                for (const element of data){
-                    // console.info("\n",tab_text, "[[",key, "]]");
-                    console.info(`\n${tab.repeat(tabs)}[[${full_key}]]`);
-                    toml_stringify_data("",full_key,element,tabs,true);
-                }
-                // console.info(tab_text, "]");
-            }
+            return toml_stringify_array(parent_key,key,data,tabs);
             break;
         case "string":
             if (arr) {
                 tabs--;
                 full_key = key
             }
-            console.info(`${tab.repeat(tabs)}${full_key} = ${toml_string(data)}`);
+            // console.info(`${tab.repeat(tabs)}${full_key} = ${toml_string(data)}`);
+            return `${tab.repeat(tabs)}${full_key} = ${toml_string(data)}\n`;
             break;
         default:
             if (arr) {
                 tabs--;
                 full_key = key
             }
-            console.info(`${tab.repeat(tabs)}${full_key} = ${data}`);
+            // console.info(`${tab.repeat(tabs)}${full_key} = ${data}`);
+            return`${tab.repeat(tabs)}${full_key} = ${data}\n`;
     }
 
     return "";
