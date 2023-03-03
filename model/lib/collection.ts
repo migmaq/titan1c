@@ -82,13 +82,32 @@ export class CollectionSnapshot<T> {
     items_by_id: Map<string, T>;
 
     constructor(collection: Collection<T>) {
+
+        // XXX HACK TO COOK ITEMS (SO WE CAN GET TEMPLATES TO GO WHILE
+        //     WE ARE STILL EVOLVING MODEL)
+        // XXX real model is too hard to do today.
+        // let items_by_id = new Map<string, T>();
+        // This is too slow to do for real (like 200ms on my loaded machine
+        // with a 6,500 word dictionary load.
+        // XXX THIS IS A BAD HACK - JUST PLAYING!!!
+        let items_by_id = new Map<string, T>;
+        for(let [item_id, item] of collection.items_by_id) {
+            let item_deep_clone = structuredClone(item);
+            this.add_derived_fields_hack(item_deep_clone);
+            items_by_id.set(item_id, item_deep_clone);
+        }
+        //let items_by_id = collection.items_by_id;
+        
         // --- Snapshot gets a point-in-time top-level clone of the collections
         //     items_by_id Map.
-        this.items_by_id = new Map(collection.items_by_id);
+        this.items_by_id = new Map(items_by_id);
         
         // --- We also make an array of the items, for quicker scans (our usual
         //     access method)
-        this.items = [...this.items_by_id.values()];
+        this.items = [...items_by_id.values()];
+    }
+
+    add_derived_fields_hack(item: any) {
     }
 }
 

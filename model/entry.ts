@@ -188,5 +188,11 @@ export class EntrySnapshot extends CollectionSnapshot<Entry> {
         return "XXX";
     }
 
-    
+    // XXX there is a whole snooty mechanism planned for derived fields, but
+    //     it is not done yet, and we need some derived fields to render templates,
+    //     so we do this temporary hack.
+    add_derived_fields_hack(entry: any) {
+        entry._name = entry.spelling.map((s:any) => s.text)[0] || 'unnamed';
+        entry._gloss_summary = entry.glosses.map((g:any) => g.gloss).join(' / ');
+    }
 }

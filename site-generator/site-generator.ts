@@ -3,13 +3,21 @@ import {typeof_extended} from "../utils/utils.ts";
 import {DictionarySnapshot} from "../model/dictionary-data.ts";
 import * as liquid from "https://esm.sh/liquidjs@10.6.0";
 //import * as liquid_loader from "https://esm.sh/liquidjs@10.6.0/fs/loader";
+import * as path from "https://deno.land/std@0.57.0/path/mod.ts";
+
 
 export class SiteGenerator {
     template_engine: liquid.Liquid;
     
     constructor(public dictionary: DictionarySnapshot,
                 public publish_root_dir: string) {
-        const templates_root = 'site-templates';
+        // XXX This way of finding the site-templates is bad, and will break when
+        // we run the site from an URL - but we are planning on migrating the
+        // templates out of the filesystem anyway - so is fine for now. XXX
+        const script_dirname = path.fromFileUrl(import.meta.url);
+        const templates_root = path.dirname(path.dirname(script_dirname))+'/site-templates';
+        console.info('Templates root dir', templates_root);
+        
         this.template_engine = new liquid.Liquid({
             strictFilters: true,
             strictVariables: true,

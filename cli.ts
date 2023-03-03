@@ -73,7 +73,7 @@ export class Cli {
         // TODO XXX: loading the dictionary data directly here is
         //           maybe a bit skeezy ???  At least the config
         //           for it needs from somewhere else.
-        const dictionary_data = new DictionaryData("../lexbuilder");
+        const dictionary_data = new DictionaryData(".");
         console.time("loading dictionary");
         await dictionary_data.load();
         console.timeEnd("loading dictionary");
@@ -85,6 +85,22 @@ export class Cli {
     async test_cli(args: string[]): Promise<void> {
         // console.info(this.titan1c.site_generator_factory("published").dictionary_search_page_factory().greet());
         //this.test();
+
+        const dictionary_data = new DictionaryData(".");
+        console.time("loading dictionary");
+        await dictionary_data.load();
+        console.timeEnd("loading dictionary");
+
+
+        for(let i=0; i<100; i++) {
+            console.time("snapshot");
+            const dictionary_snapshot = dictionary_data.snapshot_factory();
+            console.timeEnd("snapshot");
+        }
+            
+
+
+        
         return Promise.resolve();
     }
 }

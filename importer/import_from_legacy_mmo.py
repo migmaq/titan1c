@@ -73,26 +73,32 @@ def import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=False):
     # import into database
     #import_json_into_db(model, entries)
 
+    root = 'mikmaq'
+    
     # import into fs
-    import_json_into_fs(None, entries)
+    import_json_into_fs(root, None, entries)
+
+
+    os.makedirs(root+'/categories')
+
     
     # spew new format to JSON
     # Note: we are doing this after import to DB so that we can see the
     #       _id fields that get added int the db import process
-    os.makedirs('mmo/import-results')
-    with open('mmo/import-results/entries.json', 'w') as f:
+    os.makedirs(root+'/import-report')
+    with open(root+'/import-report/entries.json', 'w') as f:
         json.dump(entries, f, sort_keys=False, indent=2, ensure_ascii=False)
 
     # spew leftovers to JSON
-    with open('mmo/import-results/leftovers.json', 'w') as f:
+    with open(root+'/import-report/leftovers.json', 'w') as f:
         json.dump(lexemes, f, sort_keys=False, indent=2, ensure_ascii=False)
     
-def import_json_into_fs(model, entries):
-    print('Importing entries into fs')
+def import_json_into_fs(root, model, entries):
+    print(f'Importing entries into directory {root}')
     for e in entries:
         public_id = e['public_id']
         assert public_id, 'Missing or empty public_id'
-        entry_dir = f'mmo/entries/{public_id[0]}/{public_id}'
+        entry_dir = f'{root}/entries/{public_id[0]}/{public_id}'
         os.makedirs(entry_dir, mode=0o777, exist_ok=True)
         entry_file = f'{entry_dir}/data.toml'
         #e = {'cat': 7}
@@ -211,13 +217,13 @@ def convert_sense(id_allocator, legacy_lexemes_by_name, date, lexeme, note, stat
     related_entries_text = related_entries_text.replace(' and ', ',')
     related_entries = re.split(r"[ ]*,[ ]*", related_entries_text)
     related_entries = list(filter(lambda v: v, related_entries))
-    if related_entries_text:
-        print(related_entries_text, related_entries)
-        for r in related_entries:
-            if legacy_lexemes_by_name.get(r):
-                print('FOUND', r)
-            else:
-                print('NOT FOUND', r)
+    # if related_entries_text:
+    #     print(related_entries_text, related_entries)
+    #     for r in related_entries:
+    #         if legacy_lexemes_by_name.get(r):
+    #             print('FOUND', r)
+    #         else:
+    #             print('NOT FOUND', r)
     entry['related_entries'] = [convert_related_entry(id_allocator, e) for e in related_entries]
                 
     # try to resolve!
@@ -328,7 +334,7 @@ def convert_category(id_allocator, category):
 def convert_other_regional_form(id_allocator, regional_form):
     out = dict()
     out['_id'] = id_allocator.alloc_next_id()
-    print('OTHER REG', regional_form['label'])
+    #print('OTHER REG', regional_form['label'])
     out['text'] = regional_form['label']
     return out
 
@@ -363,11 +369,13 @@ def stripOptSuffix (s, suffix):
 def stripOptPrefix (s, prefix):
     return s[len(prefix):] if s.startswith (prefix) else s
 
-
 if __name__ == "__main__":
-    if sys.argv[1:2] == ['import'] or sys.argv[1:] == ['import', '--i_realize_that_this_will_nuke_the_working_mmo_db']:
-        import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=True)
-        print('Legacy mmo imported')
-    else:
-        print('Incorrect usage - see the source')
+    import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=True)
+
+# if __name__ == "__main__":
+#     if sys.argv[1:] == ['import', '--i_realize_that_this_will_nuke_the_working_mmo_db']:
+#         import_legacy_mmo(i_realize_that_this_will_nuke_the_working_mmo_db=True)
+#         print('Legacy mmo imported')
+#     else:
+#         print('Incorrect usage - see the source')
 
