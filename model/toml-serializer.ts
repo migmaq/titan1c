@@ -1,107 +1,98 @@
 import { parse as toml_parse, stringify as toml_stringify } from "https://deno.land/std@0.177.0/encoding/toml.ts";
+import * as _ from "https://cdn.skypack.dev/lodash";
 import {CEntry as Entry} from "./entry.ts";
 import {createSchema} from "./schema.ts";
-
+// import * as _ from "./lodash.js";
 
 async function round_trip_test(entry_toml_path: string) {
-    const entry_toml_text = await Deno.readTextFile(entry_toml_path);
-    const entry = toml_parse(entry_toml_text);
-    //console.info(toml_stringify(entry));
-    console.log(super_toml_stringify(entry));
+     const entry_toml_text = await Deno.readTextFile(entry_toml_path);
+     const entry = toml_parse(entry_toml_text);
+     const entry1 = toml_parse(super_toml_stringify(entry));
+     console.info(toml_stringify(entry));
+     console.log(_.isEqual(entry,entry1));
+    // console.log((JSON.stringify(entry)))
+    // console.log((JSON.stringify(entry1)));
 }
 
-class KeyLists {
-    simple_properties : string[] = [];
-    empty_arrays : string[] = [];
-    arrays : string[] = [];
-    spare : string[] = [];
-    missing : string[] = [];
+function check_prop (data: any, prop: any, schema: any, top :string, id: any, fix: boolean) {
+    if (typeof(data) !== prop.type){
+        console.log(`*${id} : Expected ${prop.type} in ${prop.key}. Found: ${typeof(data)}.`);                            
+    }
+    if (prop.type === 'object'){
+        check_data(data, schema, prop.class, id, fix);
+    }
 }
 
-function key_lister (data : any, template : any) : KeyLists{
-    let key_lists = new KeyLists();
-    for (const key in template) {    
-        if (Array.isArray(template[key])) {
-            if (data.hasOwnProperty(key)) {
-                if (data[key].length === 0) {
-                    key_lists.empty_arrays.push(key);
-                }
-                else {
-                    key_lists.arrays.push(key);                    
-                }
-            }
-            else {
-                key_lists.missing.push(key);
-            }
+function check_data (data : any, schema : any, top:string, id : any, fix: boolean){
+    for (const prop of schema[top]) {
+        if (!data.hasOwnProperty(prop.key)) {
+            console.log(`*${id} : ${top} is missing property: ${prop.key}`);
         }
         else {
-            if (data.hasOwnProperty(key)) {
-                key_lists.simple_properties.push(key);
-            }
+            if(prop.array){
+                if (!Array.isArray(data[prop.key])){
+                    console.log(`*${id} : ${top}.${prop.key} should be an array but is not`);
+                }
+                else {
+                    for (const item of data[prop.key]) {
+                        check_prop(item, prop, schema, prop.class, id, fix);
+                    }
+                }
+            }    
             else {
-                key_lists.missing.push(key);
+                check_prop(data[prop.key], prop, schema, prop.class, id, fix);
             }
-
         }
     }
 
     for (const key in data) {    
-        if (!template.hasOwnProperty(key)) {
-            key_lists.spare.push(key);
+        let found = false;
+        for (const prop of schema[top]) {
+            if (prop.key === key) { found = true }
+        }
+        if (!found) {
+            console.log(`*${id} : unexpected propertry ${key} in ${top}`)
         }
     }
-    // console.log(key_lists)
-    return key_lists;
+
 }
 
 function super_toml_stringify(data: any): string {
-    // console.info(Object.getOwnPropertyNames((new Entry()).categories[0]));
-    // console.info(typeof(new Entry()).categories[0]);
+
     let output = "";
 
     let schema = createSchema();
-    console.log(schema);
-    const key_lists = key_lister(data,new Entry());
-    // for (const key in data) {    
-    const ordered_list = key_lists.simple_properties.concat(key_lists.empty_arrays).concat(key_lists.arrays);
-    for (const key of ordered_list) {    
-            output = output + toml_stringify_data("",key,data[key],0,false);
+     check_data(data,schema,"Entry", data._id, false);
+
+     for (const prop of schema.Entry) {    
+            output = output + toml_stringify_data("",prop.key,data[prop.key],0,false, schema, prop.class);
     }
 
-    if(key_lists.missing.length > 0) {
-        // throw new Error (`Missing properties :"${key_lists.missing}"`);
-       console.log(`Missing properties :[${key_lists.missing}]`);
-
-    }
-    if(key_lists.spare.length > 0) {
-        // throw new Error (`Unexpected properties :"${key_lists.spare}"`);
-       console.log(`Unexpected properties :[${key_lists.spare}]`);
-
-    }
-
+    // return '';
     return output;
 }
 
-function toml_stringify_array(parent_key: string, key: string, data: any,tabs: number): string {
+function toml_stringify_array(parent_key: string, key: string, data: any,tabs: number, schema: any, cls: string): string {
     const tab = "   ";
     let full_key = key;
     if (parent_key !=="") { full_key = `${parent_key}.${key}` ; }
 
     if (data.length === 0) {
         // console.info(`${tab.repeat((tabs < 1) ? 0 : tabs-1)}${key} = []`);
-        return `${tab.repeat((tabs < 1) ? 0 : tabs-1)}${key} = []\n`;
+        return '';
+        // return `${tab.repeat((tabs < 1) ? 0 : tabs-1)}${key} = []\n`;
     }
     else {
         let output = "";
         for (const element of data){
             // console.info(`\n${tab.repeat(tabs)}[[${full_key}]]`);
             output = output + `\n${tab.repeat(tabs)}[[${full_key}]]\n`;
-            output = output + toml_stringify_data("",full_key,element,tabs,true);
+            output = output + toml_stringify_data("",full_key,element,tabs,true, schema, cls);
         }
         return output;
     }
 }
-function toml_stringify_data(parent_key: string, key: string, data: any,tabs: number,arr: boolean,): string {
+function toml_stringify_data(parent_key: string, key: string, data: any,tabs: number,arr: boolean,schema: any, cls: string): string {
     const tab = "   ";
     let type = "";
     let full_key = key;
@@ -114,13 +105,16 @@ function toml_stringify_data(parent_key: string, key: string, data: any,tabs: nu
     {
         case "object":
             let output = "";
-            for (const curkey in data) {
-                output = output + toml_stringify_data(full_key,curkey, data[curkey],tabs+1,arr);
+            // console.log(schema[cls]);
+            for (const prop of schema[cls]) {
+                // console.log (prop);
+                // output = output + prop.class;
+                output = output + toml_stringify_data(full_key,prop.key, data[prop.key],tabs+1,arr,schema, prop.class);
             }
             return output;
             break;
         case "array":
-            return toml_stringify_array(parent_key,key,data,tabs);
+            return toml_stringify_array(parent_key,key,data,tabs, schema, cls);
             break;
         case "string":
             if (arr) {
@@ -142,25 +136,6 @@ function toml_stringify_data(parent_key: string, key: string, data: any,tabs: nu
     return "";
 }
 
-function toml_entry(entry): string {
-    
-    toml_key_and_value("_id",entry._id,"");   
-    toml_key_and_value("public_id",entry.public_id,"");
-    toml_key_and_value("part_of_speech",entry.part_of_speech,"");   
-
-    return "";
-    
-}
-
-function toml_key_and_value (key:string, value:any, indent:string) :string
-{
-    switch (typeof value) {
-        case "string":
-            return indent + key + " = " + toml_string(value) + "\n";
-        default:
-            throw new Error (`Unhandled type ${value}`);
-    }
-}
 
 function toml_string (text:string): string {
     if (typeof text !== 'string')
