@@ -1,0 +1,68 @@
+<head>
+
+    <style>
+
+     #annotatedPage {
+         position:relative; display:inline-block;
+     }
+
+     #annotatedPage svg {
+        position:absolute; top:0; left:0;
+     }
+
+     .group > rect.segment {
+         fill-opacity: 10%;
+         stroke-width:3;
+         stroke:green;
+     }
+
+     .group:hover > rect.segment {
+         stroke:red;
+     }
+
+     .group.active > rect.segment {
+         stroke-width:3;
+         stroke:purple;
+     }
+
+    </style>
+
+    <script>
+     function activate_group() {
+         const group_elem = event.currentTarget;
+
+         console.info(`activate group ${group_elem.id}`);
+
+         const current_active_group_elem = document.querySelector('#annotatedPage svg .group.active');
+         if(current_active_group_elem) {
+             console.info(`deactivating group ${current_active_group_elem.id}`);
+             current_active_group_elem.classList.remove('active');
+         }
+         
+         group_elem.classList.add('active');
+     }
+    </script>
+
+</head>
+
+<body>
+
+    <h1>Sample Page</h1>
+    
+    <div id="annotatedPage">
+        
+        <img src="01R_P9S16SS1P1_050.jpg" width="982" height="1500">
+        <svg width="982" height="1500">
+
+            <svg class="group" id="puppy" onclick="activate_group()">
+                <rect class="segment" x="35" y="340" width="590" height="30" />
+                <rect class="segment" x="630" y="340" width="300" height="60"/>
+            </svg>
+
+            <svg class="group" id="mouse" onclick="activate_group()">
+                <rect class="segment" x="35" y="375" width="590" height="40" />
+            </svg>
+            
+        </svg>
+    </div>
+</body>
