@@ -119,6 +119,14 @@ export class RelationField extends Field {
         this.fields = fields;
     }
 
+    non_relation_fields() {
+        return this.fields.filter(f=>!(f instanceof RelationField));
+    }
+
+    relation_fields() {
+        return this.fields.filter(f=>f instanceof RelationField);
+    }
+
     validate(locus: string, value: any) {
         const relation_locus = locus + '/' + this.name;
         for(const field_name of this.fields) {
@@ -223,15 +231,15 @@ const sample_entry_schema = {
 // [[part_of_speech]]
 //    $type: 'string'
 // [[subentry]]
-//    $type: 'subrelation'
+//    $type: 'relation'
 //    [[spelling]]
-//      $type: 'subrelation'
+//      $type: 'relation'
 //      [[text]]
 //        $type: 'string'
 //      [[variant]]
 //        $type: 'string'
 //    [[definition]]
-//      $type: 'subrelation'
+//      $type: 'relation'
 //      [[definition]]
 //        $type: 'string',
 //      [[variant]]
